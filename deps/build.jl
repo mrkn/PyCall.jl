@@ -78,11 +78,19 @@ function find_libpython(python::AbstractString)
 
     # TODO: other paths? python-config output? pyconfigvar("LDFLAGS")?
 
+    for lib in libs
+      info("libs[] = ", lib)
+    end
+    for libpath in libpaths
+      info("libpaths[] = ", libpath)
+    end
+
     # find libpython (we hope):
     for lib in libs
         for libpath in libpaths
             libpath_lib = joinpath(libpath, lib)
             if isfile(libpath_lib*"."*Libdl.dlext)
+                info("try: ", libpath_lib*"."*Libdl.dlext)
                 try
                     return (Libdl.dlopen(libpath_lib,
                                          Libdl.RTLD_LAZY|Libdl.RTLD_DEEPBIND|Libdl.RTLD_GLOBAL),
@@ -100,6 +108,7 @@ function find_libpython(python::AbstractString)
     for lib in libs
         lib = splitext(lib)[1]
         try
+            info("try: ", lib)
             return (Libdl.dlopen(lib, Libdl.RTLD_LAZY|Libdl.RTLD_DEEPBIND|Libdl.RTLD_GLOBAL),
                     lib)
         catch e
