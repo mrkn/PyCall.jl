@@ -75,11 +75,6 @@ environment:
     PYTHONDIR: "use_conda"
     PYTHON: "use_conda"
 
-branches:
-  only:
-    - master
-    - /release-.*/
-
 notifications:
   - provider: Email
     on_build_success: false
